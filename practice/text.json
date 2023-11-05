@@ -1,0 +1,53 @@
+{
+    "name": "Complex Example",
+    "version": 1.0,
+    "description": "A complex JSON example with nested structures.",
+    "contributors": [
+        {
+            "name": "Alice",
+            "email": "alice@example.com"
+        },
+        {
+            "name": "Bob",
+            "email": "bob@example.com"
+        }
+    ],
+    "data": {
+        "items": [
+            {
+                "id": 1,
+                "type": "data point",
+                "attributes": {
+                    "length": 5.1,
+                    "width": 3.5,
+                    "height": 1.2
+                },
+                "tags": [
+                    "example",
+                    "sample",
+                    "item1"
+                ]
+            },
+            {
+                "id": 2,
+                "type": "data point",
+                "attributes": {
+                    "length": 6.2,
+                    "width": 2.4,
+                    "height": 2.3
+                },
+                "tags": [
+                    "example",
+                    "sample",
+                    "item2"
+                ]
+            }
+        ],
+        "metrics": {
+            "count": 2,
+            "size": "medium"
+        }
+    },
+    "status": "active",
+    "is_public": true
+}
