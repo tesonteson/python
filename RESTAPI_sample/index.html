@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            margin: 100px;
+            display: block;
+        }
+        form {
+            display: flex;
+            flex-flow: column;
+        }
+        input {
+            max-width: 300px;
+        }
+        button {
+            max-width: 300px;
+        }
+        .iris_data {
+            margin: 10px;
+        }
+        .prediction_result {
+            margin: 10px;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+    <div>
+        <h3>画像の数字を予測</h3>
+        <form id="image_form" enctype="multipart/form-data">
+            <input type="file" id="image" name="image" accept="*">
+            <button type="submit">画像の数字を予測する</button>
+        </form>
+        <div class="prediction_result" id="image_prediction_result"></div>
+    </div>
+
+    <div>
+        <h3>あやめの種類の予測</h3>
+        <form id="iris_form" enctype="application/json">
+            <div class="iris_data"><label>sepal_length</label><input type="number" name="sepal_length"/></div>
+            <div class="iris_data"><label>sepal_width</label><input type="number" name="sepal_width"/></div>
+            <div class="iris_data"><label>petal_length</label><input type="number" name="petal_length"/></div>
+            <div class="iris_data"><label>petal_width</label><input type="number" name="petal_width"/></div>
+            <button type="submit">あやめの種類を予測する</button>
+        </form>
+        <div class="prediction_result" id="iris_prediction_result"></div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#iris_form').on('submit', function(e) {
+                e.preventDefault();
+
+                var data = {
+                    sepal_length: $('input[name="sepal_length"]').val(),
+                    sepal_width: $('input[name="sepal_width"]').val(),
+                    petal_length: $('input[name="petal_length"]').val(),
+                    petal_width: $('input[name="petal_width"]').val()
+                };
+
+                $.ajax({
+                    url: 'http://localhost:8000/iris_prediction',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        $('#iris_prediction_result').text('予測結果: ' + response.result);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+
+
+        $(document).ready(function() {
+            $('#image_form').on('submit', function(e) {
+                e.preventDefault();
+
+                var formData = new FormData();
+                var imageFile = $('#image')[0].files[0];
+                formData.append("image", imageFile);
+
+                $.ajax({
+                    url: 'http://localhost:8000/image_prediction',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,  // マルチパート/フォームデータのためにfalseに設定
+                    processData: false,  // jQueryがデータを処理しないようにfalseに設定
+                    success: function(response) {
+                        $('#image_prediction_result').text('予測結果: ' + response.result);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+
+    </script>
+
+</body>
+</html>
